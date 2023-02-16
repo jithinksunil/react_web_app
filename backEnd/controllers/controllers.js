@@ -1,4 +1,5 @@
 const userCollection = require("../models/userSchema")
+const jwt=require('jsonwebtoken')
 
 module.exports={
     userLogin:async(req,res)=>{
@@ -6,7 +7,8 @@ module.exports={
         let userExist=await userCollection.findOne({email:email})
         if(userExist){
             if(userExist.password==password){
-                res.json({userExist:true,passWordVerified:true})
+                const token = jwt.sign(req.body, 'mySecretKey', { expiresIn: '1h' });
+                res.json({userExist:true,passWordVerified:true,token})
             }
             else{
                 res.json({userExist:true})
@@ -26,6 +28,11 @@ module.exports={
         const userDetails=await userCollection.findOne({_id:req.body._id})
         res.json(userDetails)
         console.log(userDetails);
+    },
+
+    addImage:async(req,res)=>{
+        console.log(req.file);
+        await userCollection.updateOne({_id:req.params.userid},{image:req.file.filename})
     },
 
     adminLogin:async (req,res)=>{

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 import axios from "../../axios";
@@ -6,23 +6,28 @@ import "./Viewuser.css";
 
 function Home() {
   const [details, setDetails] = useState({});
+  const [image,setImage]= useState(null)
+  const [updated,setUpdated]=useState(null)
   useEffect(()=>{
     axios.post('/userprofile',{_id:'63eccc321f3f9ffb96e56aa9'},{withCredentials: true,}).then((response)=>{
     setDetails(response.data)
     })
-  })
-  
+  },[])
+
+  let formData=new FormData()
+  const handleImageSubmit=(e)=>{
+    e.preventDefault()
+    formData.append("file",image)
+    console.log(formData);
+    axios.post('/addimage/63eccc321f3f9ffb96e56aa9',formData,{headers:{"Content-Type":"multipart/form-data"}}).then((response)=>{
+    })
+  }
+  let url=`http://localhost:8000/uploads/${details.image}`
   return (
     <div className="home">
       <div className="left_div">
         <div className="profile_div">
-          {details.image === null && <img src="" alt="" />}
-          {details.image !== null && (
-            <img
-              
-              alt=""
-            />
-          )}
+          {updated?<img src={updated} alt="Dp" />:<img src={url} alt="Dp" />}
         </div>
         { (
           <div className="changeImg_div">
@@ -31,7 +36,7 @@ function Home() {
               
             </div>
             <div>
-        <button >Submit</button>
+        <button onClick={handleImageSubmit} >Submit</button>
             </div>
           </div>
         )}
@@ -41,7 +46,8 @@ function Home() {
           <input
             value=""
             type="file"
-            
+            onChange={(e)=>{setImage(e.target.files[0]);setUpdated( URL.createObjectURL(e.target.files[0]));console.log(URL.createObjectURL(e.target.files[0]))}}
+            id="file"
           />
 
         </div>

@@ -27,6 +27,9 @@ app.use(
     })
 )
 
+const path=require('path')
+app.use('/uploads',express.static(path.join(__dirname,'./uploads')))//to download image from the static folder
+
 app.use(express.urlencoded({extended:true}))//to get data from post method
 app.use(express.json())//to recieve the data in json format from the axios call
 
