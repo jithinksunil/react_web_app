@@ -21,10 +21,10 @@ function App() {
           <Route path='/' element={<LoginPage/>}/>
           <Route path='/signup' element={<SignupPage/>}/>
           <Route path='/userprofile' element={<UserProfilePage/>}/>
+          <Route path='/adminlogin' element={<LoginPage/>}/>
           <Route path='/admin' element={<AdminPage/>}/>
           <Route path='/adduser' element={<AdduserPage/>}/>
-          <Route path='/edituser' element={<EdituserPage/>}/>
-          <Route path='/viewuser' element={<ViewuserPage/>}/>
+          <Route path='/edituser/:userid' element={<EdituserPage/>}/>
 
         </Routes>
       </BrowserRouter>

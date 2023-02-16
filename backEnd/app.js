@@ -4,8 +4,7 @@ const mongoose=require('mongoose')
 
 
 const userCollection=require('./models/userSchema')
-const userRoutes=require('./routes/userRoutes')
-const adminRoutes=require('./routes/adminRoutes')
+const routes=require('./routes/routes')
 
 mongoose.connect('mongodb://127.0.0.1:27017/reactWebApplication',{
     useNewUrlParser:true,
@@ -31,7 +30,6 @@ app.use(
 app.use(express.urlencoded({extended:true}))//to get data from post method
 app.use(express.json())//to recieve the data in json format from the axios call
 
-app.use('/',userRoutes)
-// app.use('/admin',adminRoutes)
+app.use('/',routes)
 
 app.listen(8000,()=>console.log('Server started'))

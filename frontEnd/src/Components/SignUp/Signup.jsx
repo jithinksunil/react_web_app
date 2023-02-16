@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
 import "./Signup.css";
-import axios from "axios";
+import axios from "../../axios";
 
 function Signup() {
 
@@ -16,8 +16,7 @@ function Signup() {
 
   const userRegistration=(e)=>{
     e.preventDefault()
-    
-    axios.post('http://localhost:8000/userrigistration',newUserData,{withCredentials: true,}).then((response)=>{
+    axios.post('/userrigistration',newUserData,{withCredentials: true,}).then((response)=>{
       navigate('/')
     }).catch((err)=>{console.log(err);})
   }

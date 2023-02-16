@@ -1,21 +1,47 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
-import axios from "axios";
+import { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "../../axios";
 
 import "./Login.css";
 function Login() {
 
   const [email,setEmail]=useState('')
   const [password,setPassword]=useState()
-  const userData={email,password}
+  const [location,setlocation]=useState('/')
+  const navigate=useNavigate()
 
+  useEffect(()=>{
+    setlocation(window.location.pathname)
+  })
+  
 
   const handleLogin=(e)=>{
     e.preventDefault()
-    axios.post('http://localhost:8000',userData,{withCredentials: true,}).then((response)=>{
-
-    })
-
+    if(location=='/'){
+      const userData={email,password}
+      axios.post('/',userData,{withCredentials: true,}).then((response)=>{
+        let {userExist,passWordVerified}=response.data
+        if(userExist&&passWordVerified){
+          navigate('/userprofile')
+        }else if(userExist){
+          console.log('email or password does not matches')
+        }else{
+          console.log('user does not exist')
+        }
+      })
+    }else if(location=='/adminlogin'){
+      const adminData={email,password}
+      axios.post('/adminlogin',adminData,{withCredentials: true,}).then((response)=>{
+        let {adminExist,passWordVerified}=response.data
+        if(adminExist&&passWordVerified){
+          navigate('/admin')
+        }else if(adminExist){
+          console.log('email or password does not matches')
+        }else{
+          console.log('admin does not exist')
+        }
+      })
+    }
   }
 
   return (

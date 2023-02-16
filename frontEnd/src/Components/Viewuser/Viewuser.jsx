@@ -1,29 +1,34 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+
+import axios from "../../axios";
 import "./Viewuser.css";
 
 function Home() {
-  const [detalis, setDetalis] = useState([]);
-  const [updated, setUpdated] = useState(null);
-  const [image, setImage] = useState(null);
-  let url;
+  const [details, setDetails] = useState({});
+  useEffect(()=>{
+    axios.post('/userprofile',{_id:'63eccc321f3f9ffb96e56aa9'},{withCredentials: true,}).then((response)=>{
+    setDetails(response.data)
+    })
+  })
   
   return (
     <div className="home">
       <div className="left_div">
         <div className="profile_div">
-          {detalis.image === null && <img src="" alt="" />}
-          {detalis.image !== null && (
+          {details.image === null && <img src="" alt="" />}
+          {details.image !== null && (
             <img
-              src={updated != null ? URL.createObjectURL(updated) : url}
+              
               alt=""
             />
           )}
         </div>
-        {image !== null && (
+        { (
           <div className="changeImg_div">
             <div>
               <div className="selecte_text">Selected Image</div>
-              <img src={image ? URL.createObjectURL(image) : ""} alt="" />
+              
             </div>
             <div>
         <button >Submit</button>
@@ -32,15 +37,13 @@ function Home() {
         )}
 
         <div className="add_profile_btn">
-          {detalis.image !== null && <p>Edit Image:</p>}
-
+          {details.image !== null && <p>Edit Image:</p>}
           <input
-            onChange={(event) => {
-              setImage(event.target.files[0]);
-            }}
             value=""
             type="file"
+            
           />
+
         </div>
       </div>
       <div className="right_div">
@@ -51,10 +54,12 @@ function Home() {
             </div>
           </div>
           <div className="details">
-            <div>Name: {detalis.name}</div> <div> Phone: {detalis.phone}</div>
-            <div> Email: {detalis.email}</div>
+            <div>Name: {details.name}</div> <div> Phone: {details.phone}</div>
+            <div> Email: {details.email}</div>
             <div className="add_profile_btn">
-              <button >Logout</button>
+              <Link to='/'>
+                <button >Logout</button>
+              </Link>
             </div>
           </div>
         </div>
