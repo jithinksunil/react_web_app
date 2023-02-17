@@ -7,14 +7,14 @@ import {MyContext} from '../../Context'
 import "./Viewuser.css";
 
 function Home() {
-  const {loggedIn,setLoggedIn}=useContext(MyContext)
+  const {setLoggedIn,userEmail}=useContext(MyContext)
   const [details, setDetails] = useState({});
   const [image,setImage]= useState(null)
   const [updated,setUpdated]=useState(null)
   const navigate=useNavigate()
 
   useEffect(()=>{
-    axios.post('/userprofile',{_id:'63eccc321f3f9ffb96e56aa9'},{withCredentials: true,}).then((response)=>{
+    axios.post('/userprofile',{email:userEmail},{withCredentials: true,}).then((response)=>{
     setDetails(response.data)
     })
   },[])
@@ -24,7 +24,7 @@ function Home() {
     e.preventDefault()
     formData.append("file",image)
     console.log(formData);
-    axios.post('/addimage/63eccc321f3f9ffb96e56aa9',formData,{headers:{"Content-Type":"multipart/form-data"}}).then((response)=>{
+    axios.post(`/addimage/${details._id}`,formData,{headers:{"Content-Type":"multipart/form-data"}}).then((response)=>{
     })
   }
 

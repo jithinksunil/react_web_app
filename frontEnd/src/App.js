@@ -17,7 +17,7 @@ import EdituserPage from './Pages/EdituserPage';
 
 
 function App() {
-  const {loggedIn,setLoggedIn,adminLoggedIn,setAdminLoggedIn}=useContext(MyContext)
+  const {loggedIn,setLoggedIn,adminLoggedIn,setAdminLoggedIn,setUserEmail}=useContext(MyContext)
 
   useEffect(()=>{
 
@@ -26,7 +26,9 @@ function App() {
       //{ withCredentials: true } is added to pass the request with cookies if false no cockies will be send
       axios.get('/tokenvalidation',{ withCredentials: true }).then((response)=>{
         let validated=response.data.validationSuccessful
+        let email=response.data.email
         setLoggedIn(validated)
+        setUserEmail(email)
       })
     }
 
@@ -53,7 +55,7 @@ function App() {
           <Route path='/adminlogin' element={adminLoggedIn?<Navigate to='/admin'/>:<LoginPage/>}/>
           <Route path='/admin' element={adminLoggedIn?<AdminPage/>:<Navigate to='/adminlogin'/>}/>
           <Route path='/adduser' element={<AdduserPage/>}/>
-          <Route path='/edituser/:userid' element={adminLoggedIn?<EdituserPage/>:<Navigate to='/adminlogin'/>}/>
+          <Route path='/edituser/:userEmail' element={<EdituserPage/>}/>
 
         </Routes>
       </BrowserRouter>

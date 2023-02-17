@@ -8,7 +8,7 @@ import {MyContext} from '../../Context'
 import "./Login.css";
 function Login() {
 
-  const {loggedIn,setLoggedIn,adminLoggedIn,setAdminLoggedIn}=useContext(MyContext)
+  const {setLoggedIn,setAdminLoggedIn,setUserEmail}=useContext(MyContext)
   const [email,setEmail]=useState('')
   const [password,setPassword]=useState()
   const [location,setlocation]=useState('/')
@@ -29,6 +29,7 @@ function Login() {
 
           Cookies.set('jwt_token', response.data.token, { expires: 7000 })
           setLoggedIn(true)
+          setUserEmail(email)
           navigate('/userprofile')
         }else if(userExist){
           console.log('email or password does not matches')

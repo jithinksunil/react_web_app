@@ -9,10 +9,11 @@ function Edituser() {
   const [email,setEmail]=useState('')
   const [password,setPassword]=useState('')
   const details={name,phone,email,password}
-  const {userid}=useParams()
+  const {userEmail}=useParams()
+
 
   useEffect(()=>{
-    axios.post('/userprofile',{_id:userid},{withCredentials: true,}).then((response)=>{
+    axios.post('/userprofile',{email:userEmail},{withCredentials: true,}).then((response)=>{
       const {name,phone,email,password}=response.data
       setName(name)
       setPhone(phone)
@@ -25,7 +26,7 @@ function Edituser() {
   const handleSubmit=(e)=>{
     e.preventDefault()
     console.log(name)
-    axios.post(`/userupdate/${userid}`,details,{withCredentials: true,}).then((response)=>{
+    axios.post(`/userupdate/${userEmail}`,details,{withCredentials: true,}).then((response)=>{
       navigate('/admin')
     }).catch((err)=>{console.log(err);})
   }

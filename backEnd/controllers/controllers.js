@@ -9,7 +9,8 @@ module.exports={
             if (err) {
                 res.json({ validationSuccessful:false });
             }else {
-                res.status(200).json({ validationSuccessful:true });
+                let email=decoded.email
+                res.status(200).json({ validationSuccessful:true,email });
             }
         })
     },
@@ -20,6 +21,7 @@ module.exports={
             if (err) {
                 res.json({ validationSuccessful:false });
             }else {
+                
                 res.status(200).json({ validationSuccessful:true });
             }
         })
@@ -49,7 +51,7 @@ module.exports={
     },
 
     userProfile:async (req,res)=>{
-        const userDetails=await userCollection.findOne({_id:req.body._id})
+        const userDetails=await userCollection.findOne({email:req.body.email})
         res.json(userDetails)
         console.log(userDetails);
     },
@@ -82,8 +84,8 @@ module.exports={
     },
 
     userUpdate:async (req,res)=>{
-        const userid=req.params.userid
-        await userCollection.updateOne({_id:userid},req.body)
+        const userEmail=req.params.userEmail
+        await userCollection.updateOne({email:userEmail},req.body)
         res.json({status:true})
     },
 
