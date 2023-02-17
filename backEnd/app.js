@@ -2,7 +2,6 @@ const express=require('express')
 const app=express()
 const mongoose=require('mongoose')
 
-
 const userCollection=require('./models/userSchema')
 const routes=require('./routes/routes')
 
@@ -18,7 +17,7 @@ mongoose.connect('mongodb://127.0.0.1:27017/reactWebApplication',{
     }
 })
 
-const cors=require('cors')
+const cors=require('cors')//setup for CORS
 app.use(
     cors({
         origin:["http://localhost:3000"],
@@ -32,6 +31,9 @@ app.use('/uploads',express.static(path.join(__dirname,'./uploads')))//to downloa
 
 app.use(express.urlencoded({extended:true}))//to get data from post method
 app.use(express.json())//to recieve the data in json format from the axios call
+
+const cookieParser = require('cookie-parser');//to get the cookies from request
+app.use(cookieParser());
 
 app.use('/',routes)
 

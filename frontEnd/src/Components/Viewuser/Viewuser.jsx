@@ -1,13 +1,18 @@
-import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { useEffect, useState, useContext } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import Cookies from 'js-cookie';
 
 import axios from "../../axios";
+import {MyContext} from '../../Context'
 import "./Viewuser.css";
 
 function Home() {
+  const {loggedIn,setLoggedIn}=useContext(MyContext)
   const [details, setDetails] = useState({});
   const [image,setImage]= useState(null)
   const [updated,setUpdated]=useState(null)
+  const navigate=useNavigate()
+
   useEffect(()=>{
     axios.post('/userprofile',{_id:'63eccc321f3f9ffb96e56aa9'},{withCredentials: true,}).then((response)=>{
     setDetails(response.data)
@@ -22,6 +27,16 @@ function Home() {
     axios.post('/addimage/63eccc321f3f9ffb96e56aa9',formData,{headers:{"Content-Type":"multipart/form-data"}}).then((response)=>{
     })
   }
+
+  const handleLoggOut=(e)=>{
+    
+    e.preventDefault()
+    Cookies.remove('jwt_token')
+    setLoggedIn(false)
+    navigate('/')
+  }
+
+
   let url=`http://localhost:8000/uploads/${details.image}`
   return (
     <div className="home">
@@ -64,7 +79,7 @@ function Home() {
             <div> Email: {details.email}</div>
             <div className="add_profile_btn">
               <Link to='/'>
-                <button >Logout</button>
+                <button onClick={handleLoggOut} >Logout</button>
               </Link>
             </div>
           </div>

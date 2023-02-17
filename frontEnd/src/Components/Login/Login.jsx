@@ -1,10 +1,14 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "../../axios";
+import Cookies from 'js-cookie';
+
+import {MyContext} from '../../Context'
 
 import "./Login.css";
 function Login() {
 
+  const {loggedIn,setLoggedIn,adminLoggedIn,setAdminLoggedIn}=useContext(MyContext)
   const [email,setEmail]=useState('')
   const [password,setPassword]=useState()
   const [location,setlocation]=useState('/')
@@ -19,9 +23,12 @@ function Login() {
     e.preventDefault()
     if(location=='/'){
       const userData={email,password}
-      axios.post('/',userData,{withCredentials: true,}).then((response)=>{
+      axios.post('/',userData).then((response)=>{
         let {userExist,passWordVerified}=response.data
         if(userExist&&passWordVerified){
+
+          Cookies.set('jwt_token', response.data.token, { expires: 7000 })
+          setLoggedIn(true)
           navigate('/userprofile')
         }else if(userExist){
           console.log('email or password does not matches')
@@ -31,9 +38,11 @@ function Login() {
       })
     }else if(location=='/adminlogin'){
       const adminData={email,password}
-      axios.post('/adminlogin',adminData,{withCredentials: true,}).then((response)=>{
+      axios.post('/adminlogin',adminData).then((response)=>{
         let {adminExist,passWordVerified}=response.data
         if(adminExist&&passWordVerified){
+          Cookies.set('adminToken', response.data.adminToken, { expires: 7000 })
+          setAdminLoggedIn(true)
           navigate('/admin')
         }else if(adminExist){
           console.log('email or password does not matches')

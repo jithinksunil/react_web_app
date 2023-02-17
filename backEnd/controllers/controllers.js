@@ -2,12 +2,36 @@ const userCollection = require("../models/userSchema")
 const jwt=require('jsonwebtoken')
 
 module.exports={
+    validateToken:(req,res)=>{
+        
+        const token =req.cookies.jwt_token
+        jwt.verify(token, 'mySecretKey', (err, decoded) => {
+            if (err) {
+                res.json({ validationSuccessful:false });
+            }else {
+                res.status(200).json({ validationSuccessful:true });
+            }
+        })
+    },
+
+    validateAdminToken:(req,res)=>{
+        const adminToken =req.cookies.adminToken
+        jwt.verify(adminToken, 'mySecretKey', (err, decoded) => {
+            if (err) {
+                res.json({ validationSuccessful:false });
+            }else {
+                res.status(200).json({ validationSuccessful:true });
+            }
+        })
+    },
+
     userLogin:async(req,res)=>{
         const {email,password}=req.body
         let userExist=await userCollection.findOne({email:email})
         if(userExist){
             if(userExist.password==password){
                 const token = jwt.sign(req.body, 'mySecretKey', { expiresIn: '1h' });
+                console.log(token)
                 res.json({userExist:true,passWordVerified:true,token})
             }
             else{
@@ -39,7 +63,8 @@ module.exports={
         const {email,password}=req.body
         if(email=='admin@gmail.com'){
             if(password=='123'){
-                res.json({adminExist:true,passWordVerified:true})
+                const adminToken = jwt.sign(req.body, 'mySecretKey', { expiresIn: '1h' });
+                res.json({adminExist:true,passWordVerified:true,adminToken})
             }
             else{
                 res.json({adminExist:true})

@@ -4,6 +4,8 @@ const controller=require('../controllers/controllers')
 
 const upload = require('../config/multer')
 
+router.get('/tokenvalidation',controller.validateToken)
+router.get('/admintokenvalidation',controller.validateAdminToken)
 router.post('/',controller.userLogin)
 router.post('/userrigistration',controller.userRegistration)
 router.post('/userprofile',controller.userProfile)
